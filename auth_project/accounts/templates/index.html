@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings{% endblock %}
+
+{% block content %}
+<div class="account-container">
+    <h1>Account Settings</h1>
+
+    <div class="menu">
+        <h3>Menu</h3>
+        <li><a href="{% url 'account_email' %}">Change Email</a></li>
+        <li><a href="{% url 'account_change_password' %}">Change Password</a></li>
+        <li><a href="{% url 'socialaccount_connections' %}">Account Connections</a></li>
+        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+    </div>
+
+    <div class="emails">
+        <h3>Email Addresses</h3>
+        {% for email in user.emailaddress_set.all %}
+        <div class="email-card {% if email.verified %}verified{% else %}not-verified{% endif %}">
+            <span>{{ email.email }}</span>
+            {% if email.verified %}
+                <span class="status">Verified ✅</span>
+            {% else %}
+                <span class="status">Not Verified ❌</span>
+            {% endif %}
+            {% if not email.primary %}
+            <a href="#" class="action">Make Primary</a>
+            {% endif %}
+            {% if not email.verified %}
+            <a href="#" class="action">Re-send Verification</a>
+            {% endif %}
+            <a href="#" class="action remove">Remove</a>
+        </div>
+        {% endfor %}
+
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.account-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1e1e1e;
+    color: #f0f0f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-family: Arial, sans-serif;
+}
+
+h1, h3 { color: #fff; }
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.menu li {
+    margin-bottom: 10px;
+}
+
+.menu a {
+    color: #4fc3f7;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+
+.emails {
+    margin-top: 30px;
+}
+
+.email-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #2c2c2c;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.email-card.verified { border-left: 4px solid #4caf50; }
+.email-card.not-verified { border-left: 4px solid #f44336; }
+
+.status { margin-left: 10px; font-weight: bold; }
+
+.action {
+    margin-left: 10px;
+    color: #ff9800;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.action.remove { color: #f44336; }
+
+.add-email {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.add-email input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+}
+
+.add-email button {
+    padding: 8px 16px;
+    background: #4fc3f7;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.add-email button:hover { background: #29b6f6; }
+</style>
+{% endblock %}
